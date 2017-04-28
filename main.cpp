@@ -8,7 +8,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include "fec/io.h"
+#include <fec/io.h>
 
 struct verity_table_params {
     char *table;
