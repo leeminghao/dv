@@ -20,6 +20,7 @@ include $(CLEAR_VARS)
 LOCAL_CLANG := true
 LOCAL_SANITIZE := integer
 LOCAL_SRC_FILES := \
+    dump.cpp \
     main.cpp \
     fec_open.cpp \
     fec_verity.cpp \

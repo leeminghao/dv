@@ -19,6 +19,8 @@
 #include <android-base/strings.h>
 #include "fec_private.h"
 
+#include "dump.h"
+
 /* converts a hex nibble into an int */
 static inline int hextobin(char c)
 {
@@ -541,6 +543,10 @@ int verity_parse_header(fec_handle *f, uint64_t offset)
         return -1;
     }
 
+    if (g_dump_metadata_header || g_dump_all) {
+        dump_metadata_header(&v->header, "");
+    }
+
     /* use raw data to check for the alternative magic, because it will
        be error corrected to VERITY_MAGIC otherwise */
     if (v->header.magic == VERITY_MAGIC_DISABLE) {
@@ -553,6 +559,10 @@ int verity_parse_header(fec_handle *f, uint64_t offset)
             sizeof(v->ecc_header)) {
         warn("failed to read verity header: %s", strerror(errno));
         return -1;
+    }
+
+    if (g_dump_metadata_header || g_dump_all) {
+        dump_metadata_header(&v->ecc_header, "ecc");
     }
 
     if (validate_header(f, &v->header, offset)) {

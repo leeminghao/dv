@@ -33,6 +33,8 @@ extern "C" {
 
 #include "fec_private.h"
 
+#include "dump.h"
+
 /* used by `find_offset'; returns metadata size for a file size `size' and
    `roots' Reed-Solomon parity bytes */
 using size_func = uint64_t (*)(uint64_t size, int roots);
@@ -115,6 +117,10 @@ static int parse_ecc_header(fec_handle *f, uint64_t offset)
     if (!raw_pread(f, &header, sizeof(fec_header), offset)) {
         error("failed to read: %s", strerror(errno));
         return -1;
+    }
+
+    if (g_dump_fec_header || g_dump_all) {
+        dump_fec_header(&header);
     }
 
     /* move offset back to the beginning of the block for validating header */
